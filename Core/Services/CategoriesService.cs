@@ -6,7 +6,7 @@ using Domain.Entities;
 using Core.Interfaces;
 using Core.Models.Category;
 
-namespace Core.Services.CRUD;
+namespace Core.Services;
 
 public class CategoriesService(
     AppDbAtbContext context,
