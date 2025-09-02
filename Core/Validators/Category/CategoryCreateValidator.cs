@@ -16,7 +16,7 @@ public class CategoryCreateValidator : AbstractValidator<CategoryCreateModel>
                 .WithMessage("Назва не може бути порожньою або null")
             .MustAsync(async (name, cancellation) =>
                 name != null && !await db.Categories
-                    .AnyAsync(c => c.Name.ToLower() == name.Trim().ToLower(), cancellation))
+                    .AnyAsync(c => c.Name.ToLower() == name.Trim().ToLower() && !c.IsDeleted, cancellation))
                 .WithMessage("Категорія з такою назвою вже існує");
 
         RuleFor(x => x.Slug)
@@ -28,7 +28,7 @@ public class CategoryCreateValidator : AbstractValidator<CategoryCreateModel>
                     return true;
 
                 var normalized = slug.Trim().ToLower().Replace(" ", "-");
-                return !await db.Categories.AnyAsync(c => c.Slug == normalized, cancellation);
+                return !await db.Categories.AnyAsync(c => c.Slug == normalized && !c.IsDeleted, cancellation);
             })
             .WithMessage("Категорія з таким слагом вже існує");
     }

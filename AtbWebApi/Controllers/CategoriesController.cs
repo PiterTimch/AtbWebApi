@@ -25,7 +25,7 @@ public class CategoriesController(ICategoriesService categoriesService) : Contro
         return Ok(result);
     }
 
-    [HttpPut("update")]
+    [HttpPut("edit")]
     //[Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Update([FromForm] CategoryEditModel model)
     {
