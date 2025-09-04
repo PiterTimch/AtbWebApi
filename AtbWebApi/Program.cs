@@ -64,7 +64,7 @@ app.MapControllers();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-var dir = builder.Configuration["ImagesDir"];
+var dir = builder.Configuration["ImagesDir"] ?? "images";
 string path = Path.Combine(Directory.GetCurrentDirectory(), dir);
 Directory.CreateDirectory(path);
 
