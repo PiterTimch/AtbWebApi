@@ -12,7 +12,8 @@ public class AccountService(IMapper mapper,
     IImageService imageService, 
     UserManager<UserEntity> userManager,
     AppDbAtbContext context,
-    RoleManager<RoleEntity> roleManager) : IAccountService
+    RoleManager<RoleEntity> roleManager,
+    IJwtServise jwtServise) : IAccountService
 {
     public async Task<string> RegisterAsync(RegisterModel model)
     {
@@ -26,6 +27,7 @@ public class AccountService(IMapper mapper,
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(user, "User");
+            return await jwtServise.CreateTokenAsync(user);
         }
         return string.Empty;
     }

@@ -44,6 +44,7 @@ builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IJwtServise, JwtServise>();
 
 builder.Services.AddControllers();
 
