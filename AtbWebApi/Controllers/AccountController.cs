@@ -13,7 +13,7 @@ public class AccountController(IAccountService accountService) : Controller
     public async Task<IActionResult> Register([FromForm] RegisterModel model)
     {
         var result = await accountService.RegisterAsync(model);
-        return Ok(result);
+        return Ok(new { Token = result });
     }
 
     [HttpPost("seed-roles")]
