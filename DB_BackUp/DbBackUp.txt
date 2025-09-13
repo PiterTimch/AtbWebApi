@@ -1,0 +1,6 @@
+chmod +x /var/www/docker_compose/backup_postgres.sh
+sed -i 's/\r$//' /var/www/docker_compose/backup_postgres.sh
+
+crontab -e
+
+* * * * * /bin/bash /var/www/docker_compose/backup_postgres.sh  >> /var/www/docker_compose/backup_postgres.log 2>&1

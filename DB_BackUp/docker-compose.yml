@@ -1,0 +1,65 @@
+version: "3.9"
+networks:
+  myAppNetwork:
+    driver: bridge
+
+services:
+  db:
+    container_name: pg-container
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: autoAtbDb
+    volumes:
+      - /data/atb/postgresql/data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - myAppNetwork
+    restart: unless-stopped
+
+  app:
+    container_name: atb-asp-api-container
+    image: pedro007salo/atb-asp-api
+    ports:
+      - "5801:8080"  
+    networks:
+      - myAppNetwork
+    volumes:
+      - /data/atb/images:/app/images
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+    environment:
+        ConnectionStrings__DefaultConnection: "Host=db;Database=autoAtbDb;Username=postgres;Password=postgres"
+
+  client:
+    container_name: angular-p22-client-container
+    image: pedro007salo/angular-p22-client
+    restart: on-failure
+    ports:
+      - "4080:80"  
+    networks:
+      - myAppNetwork
+
+  db-backup:
+    image: prodrigestivill/postgres-backup-local
+    container_name: pg-backup
+    restart: always
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=autoAtbDb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - SCHEDULE=* * * * *
+      - BACKUP_KEEP_DAYS=7
+      - BACKUP_KEEP_WEEKS=4
+      - BACKUP_KEEP_MONTHS=6
+    volumes:
+      - /data/atb/backups:/backups
+    networks:
+      - myAppNetwork
+
+
